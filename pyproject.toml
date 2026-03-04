@@ -1,5 +1,5 @@
 [project]
-name = "PyFT8_ptt"
+name = "PTT"
 version = "0.0.1"
 license = "GPL-3.0-or-later"
 
@@ -26,5 +26,5 @@ Homepage = "https://github.com/G1OJS/PyFT8_ptt"
 Issues = "https://github.com/G1OJS/PyFT8_ptt/issues"
 
 [tool.setuptools]
-packages = ["PyFT8_ptt"]
+packages = ["PTT", "IC_7100"]
 license-files = ["LICENSE"]
