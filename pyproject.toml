@@ -26,5 +26,5 @@ Homepage = "https://github.com/G1OJS/PyFT8_ptt"
 Issues = "https://github.com/G1OJS/PyFT8_ptt/issues"
 
 [tool.setuptools]
-packages = ["PTT", "IC_7100"]
+packages = ["Rigctrl"]
 license-files = ["LICENSE"]

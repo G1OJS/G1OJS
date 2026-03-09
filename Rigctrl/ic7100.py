@@ -1,6 +1,6 @@
 
 class IC_7100:
-    import serial
+    import serial, time
 
     def __init__(self, verbose = False, port = 'COM4', baudrate = 9600):
         self.serial_port = False
@@ -59,7 +59,7 @@ class IC_7100:
         resp = False
         self.setMode("RTTY")
         self.setPTTON()
-        timers.sleep(0.05)
+        self.time.sleep(0.05)
         if(self.verbose):
             print(f"CAT command: get SWR")
         resp = self.sendCAT(b'\x15\x12')
