@@ -28,17 +28,21 @@ void loop() {
   
   if (readSerialCommand()) {
     char cmd_ = cmd.charAt(0);
-    if (cmd_ == 'T') {
+    if (cmd_ == 'T') {  //T = Tune to
       TargetStep = cmd.substring(1).toInt();
       Serial.print("Tune to: "); Serial.println(TargetStep);
       tuneToStep();
     }
+    if (cmd_ == 'B') { 
+      Serial.print("Remove backlash to: "); Serial.println(TargetStep);
+      remove_backlash();
+    }
+    
     if (cmd_ == 'M') {digitalWrite(MainAnt, (cmd.charAt(1) == 'L') );}
     if (cmd_ == 'R') {digitalWrite(RxAnt, (cmd.charAt(1) == 'M') );}
     if (cmd_ == 'Q') {getAndPrintCurrStep();}
-    if (cmd_ == 'N') {nudge(cmd.charAt(1) == 'U');}
   }
-  delay(500);
+  delay(5);
 }
 
 bool readSerialCommand() {
@@ -55,7 +59,11 @@ bool readSerialCommand() {
 }
 
 void tuneToStep() {
-  getAndPrintCurrStep();
+  moveToTarget(CurrStep < TargetStep);
+  printTUNED();
+}
+
+void remove_backlash() {
   if (CurrStep < TargetStep) {
     Serial.println("TUNING UP");
     moveToTarget(true);
@@ -99,20 +107,6 @@ void moveToTarget(bool directionUp) {
     }
   }
   motor_stop();
-}
-
-void nudge(bool directionUp){
-  getAndPrintCurrStep();
-  const int delta = 1;
-  TargetStep = directionUp? CurrStep + delta : CurrStep - delta;
-  analogWrite(directionUp? MotorA:MotorB,240) ;
-  while (directionUp? analogRead(A0) < TargetStep : analogRead(A0) > TargetStep) {
-    delay(directionUp? 70:50);
-    motor_stop();
-    delay(30);
-  }
-  motor_stop();
-  getAndPrintCurrStep();
 }
 
 void getAndPrintCurrStep() {
