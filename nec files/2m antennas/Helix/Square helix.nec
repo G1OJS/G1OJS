@@ -1,0 +1,32 @@
+CM
+CM
+CM
+CE
+SY Fd=0.067672
+SY Fx=0.023475
+SY BASE=7
+SY Sep=0.200869
+SY S=0.11736
+SY L=0.289711
+SY H = L / 8
+SY Fz=0.030886
+SY WD=0.01
+
+GW	3	1	S/2	-S/2	sep/2	S/2	-S/2	sep/2+H	WD/2
+GW	4	3	S/2	-S/2	sep/2+H	S/2	S/2	sep/2+H	WD/2
+GM	1	7	0	0	90	0	0	H	3
+GX	1	001
+GW	1	1	S/2	-S/2	-sep/2	S/2	-S/2	sep/2	WD/2
+
+GA	100	16	Fd/2	0	360	0.0005
+GM	0	0	90	0	0	0	0	0	100
+GM	0	0	0	0	0	Fx  	0	Fz + L/2+Sep/2	100
+
+
+GM	0	0	0	0	0	0	0	BASE
+
+GE	-1
+GN	1
+EX	0	100	1	0	1.
+FR  0    5    0    0  144.      1.0
+EN
