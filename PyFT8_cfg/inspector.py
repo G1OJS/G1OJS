@@ -1,27 +1,29 @@
 import pickle
-with open("heard_by_me.pkl", "rb") as f:
+import numpy as np
+import time
+
+
+with open("hearing_me.pkl", "rb") as f:
     data = pickle.load(f)
 
-import time
-tnow = time.time()
-
-HEARING_PANEL_LIFE_MINS = 20
-#new_data = {}
-#for b in data:
-#    if b != '2m':
-#        new_data[b] = data[b]
-#data = new_data
+data2 = {}
 for b in data:
-    print(f"\nBand: {b}")
-    band_rpts = data[b]
-    print('\n'.join([f"{b} {band_rpts[call]}" for call in band_rpts]))
-    print()
-    print("Recent")
-    calls_now = [call for call in band_rpts if (tnow - band_rpts[call]['t']) < 60*HEARING_PANEL_LIFE_MINS]
-    for call in calls_now:
-        rpt = band_rpts[call]
-        ts = time.strftime("%y%m%d_%H%M%S", time.gmtime(rpt['t']))
-        print(f"{b} {ts} {band_rpts[call]}")
+    band_dict = {}
+    for c in data[b]:
+        info = data[b][c]
+        info.pop('c',None)
+        info.pop('new',None)
+        info.update({'t':int(info['t']), 'rp':int(info['rp'])})
+        band_dict[c] = info
+        #print(b,c,info)
+    data2[b] = band_dict
+        
 
-with open("heard_by_me.pkl", "wb") as f:
-    pickle.dump(data, f)
+with open("hearing_me_2.pkl", "wb") as f:
+    pickle.dump(data2, f)
+
+
+with open("hearing_me_2.pkl", "rb") as f:
+    data = pickle.load(f)
+for c in data2['2m']:
+    print(data2['2m'][c])
