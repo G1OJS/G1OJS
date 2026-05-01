@@ -1,0 +1,19 @@
+CM
+CM
+CM
+CE
+SY base = 5.5
+SY side=1.605022
+SY wd = 0.005
+
+GW	1	10	-side/2	0	side	side/2	0	side	wd/2
+GW	2	10	-side/2	0	0	side/2	0	0	wd/2
+GW	3	10	side/2	0	0	side/2	0	side	wd/2
+GW	4	10	-side/2	0	0	-side/2	0	side	wd/2
+GM	0	0	0	0	0	0	0	base
+
+GE -1
+GN 2 0 0 0 11 0.01
+EX	0	2	5	0	1.
+FR	0	5	0	0	50.3	1.0
+EN

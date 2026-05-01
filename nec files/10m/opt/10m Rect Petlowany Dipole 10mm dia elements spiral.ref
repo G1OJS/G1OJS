@@ -1,0 +1,29 @@
+CM
+CM
+CM
+CM forw: 0, 0 ; back: 0, 180
+CE
+SY BASE=7.3
+
+SY W0 = 0.01
+SY L0 = 4.95
+SY lfact=0.6
+SY E = L0 * lfact /2
+SY B=0.167058
+SY n=10
+SY lfd = 0.01
+GH	2	100	0.1/n	0.1	0	0	b	b	w0/2
+GM	0	0	0	0	0	0	0	E
+GW	1	5	0	0	lfd	0	0	E	W0/2
+GM	0	0	0	90
+GX	10	100
+GW	100	1	-lfd	0	0	lfd	0	0	W0/2
+GM	0	0	0	0	0	0	0	BASE
+
+GE -1
+GN 2 0 0 0 11 0.01
+LD	5	0	0	0	37700000
+EX	0	100	1	0	1.
+FR,0,1,0,0,28.2
+PQ -1
+PT -1

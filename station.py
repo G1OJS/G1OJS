@@ -7,27 +7,24 @@ import time, queue
 from matplotlib import rcParams
 from matplotlib.widgets import Slider, Button
 from matplotlib.animation import FuncAnimation
+import psutil
 
 import serial, socket, subprocess
 class Rig:
     def __init__(self,  com = 'COM4', s = 9600, rig = 3070, rigctld = 'C:/WSJT/wsjtx/bin/rigctld-wsjtx'):
         host, port ="localhost", 4532
-        if not self.create_socket(host, port):
+        if not any(['rigctld' in i.name() for i in psutil.process_iter()]):
             cmd = f"{rigctld} -m {rig} -r {com} -s {s}"
             threading.Thread(target = subprocess.run, args = (cmd,)).start()
             time.sleep(0.5)
-            self.create_socket(host, port)
-
-    def create_socket(self, host, port):
-        try:
-            self.sock = socket.create_connection((host, port))
-        except:
-            return False
-        return True
+        self.sock = socket.create_connection((host, port))
 
     def cmd(self, command):
         self.sock.sendall((command + "\n").encode())
-        return self.sock.recv(1024).decode()
+        try:
+            return self.sock.recv(1024).decode()
+        except:
+            return None
 
     def _decode_twoBytes(self, twoBytes):
         if(len(twoBytes)==2):
@@ -72,6 +69,7 @@ class Rig:
 class Arduino:
     def __init__(self, verbose = False, port = 'COM7', baudrate = 9600):
         import serial
+        self.good_tunings = {}
         self.serial = serial
         self.serial_port = False
         self.port = port
@@ -85,9 +83,9 @@ class Arduino:
                  '40m':  (7.0, 7.2), '30m':  (10.1, 10.15), '20m':  (14.0, 14.35),
                  '17m':  (18.068, 18.168),'15m':  (21.0, 21.45),'12m':  (24.89, 24.99),
                  '10m':  (28.0, 29.7), '6m':   (50.0, 52.0), '2m': (144.0, 146.0)}
-        self.default_search = {'bands':['160m', '80m', '60m', '40m'],
-                        'steps': [ np.arange(58,62,1), np.arange(310,330,1), np.arange(597,608,1), np.arange(890,897,1)]}
-        self.load_tunings()
+        self.default_search = {'bands':['80m', '60m', '40m', '30m', '20m', '17m'],
+                        'steps': [ np.arange(60,70,1), np.arange(180,190,1), np.arange(265,275,1), np.arange(500,505,1), np.arange(675,685,1), np.arange(845,855,0.5)]}
+       # self.load_tunings()
         self.connect()
 
     def parse_string(self, txt, pos):
@@ -101,12 +99,6 @@ class Arduino:
 
     def get_current_swr(self):
         return self.swr
-
-    def get_loop_step(self):
-        return self.loop_step
-
-    def get_rotator_pos(self):
-        return self.rotator_pos
 
     def band_from_freq(self, fMHz):
         for band, (lo, hi) in self.bands.items():
@@ -139,6 +131,7 @@ class Arduino:
                 if newval is not None:
                     self.rotator_pos = newval
             if 'READY' in d:
+                print("[ARD] Ready")
                 self.ready = True
             
     def send_command(self, c):
@@ -185,8 +178,9 @@ class Gui:
         self.pmarg = 0.04
         self.station_controller = station_controller
         self.make_layout()
-        self.anim = FuncAnimation(self.fig, self._animate, frames=400000, interval=100)
-
+        self.plt.ion()
+        self.plt.pause(0.1)
+        
     def make_layout(self, wf_left = 0.15, wf_top = 0.87):
         rcParams['toolbar'] = 'None'
         self.plt = plt
@@ -219,7 +213,7 @@ class Gui:
         ax_swr_slider = self.fig.add_axes([0.2, 0.2, 0.6, 0.05])
         self.swr_slider = Slider(ax_swr_slider,  'SWR', 1, 3, orientation='horizontal', dragging = False)
         ax_tuning_slider = self.fig.add_axes([0.2, 0.1, 0.6, 0.05])
-        self.tuning_slider = Slider(ax_tuning_slider,  'Tune step', 30, 900, orientation='horizontal', dragging = False)
+        self.tuning_slider = Slider(ax_tuning_slider,  'Tune step', 30, 900, orientation='horizontal', dragging = True)
 
     def _make_buttons(self, buttons, styles, btns_top, btns_left, btn_h, btn_w, step_x, step_y):
         btn_x, btn_y = btns_left, btns_top
@@ -234,13 +228,14 @@ class Gui:
             btn_widg.data = btn['data']
             btn_widg.on_clicked(lambda event, btn_widg=btn_widg: self.on_control_click(btn_widg))
             self.buttons.append(btn_widg)
-        
-    def _animate(self, frame):
-        self.tuning_slider.set_val(self.station_controller.get_loop_step())
-        self.swr_slider.set_val(self.station_controller.get_current_swr())
-        self.pos_slider.set_val(self.station_controller.get_rotator_pos())
-        return [self.tuning_slider, self.swr_slider, self.pos_slider]
 
+    def update_till_controller_ready(self):
+        while not self.station_controller.ready:
+            self.pos_slider.set_val(self.station_controller.rotator_pos)
+            self.tuning_slider.set_val(self.station_controller.loop_step)
+            self.fig.canvas.draw()
+            self.plt.pause(0.1)
+        
 class App:
       
     def __init__(self):
@@ -251,27 +246,30 @@ class App:
         threading.Thread(target = self.station_controller.monitor, daemon = True).start()
         self.station_controller.send_command("<QL>")
         self.station_controller.send_command("<QR>")
-        self.gui.plt.show()
+        self.gui.update_till_controller_ready()
 
     def check_swr(self):
         self.station_controller.swr = self.rig.getSWR()
-    
+        self.gui.swr_slider.set_val(self.station_controller.get_current_swr())
+
     def tune_loop(self):
         self.station_controller.send_command("<ML>")
         fkHz = self.rig.get_freq_Hz()/1000
         print(fkHz)
         steps = self.station_controller.get_tuning(fkHz)
+        print(steps)
         if steps is not None:
             self.station_controller.send_command(f"<T{steps[0]}>")
-            self.station_controller.wait_for_ready()
+            self.gui.update_till_controller_ready()
             for step in steps:
                 if step > self.station_controller.loop_step:
                     self.station_controller.send_command(f"<T{step}>")
-                    self.station_controller.wait_for_ready()
+                    self.gui.update_till_controller_ready()
+                    time.sleep(0.2)
                     self.check_swr()
                     if self.station_controller.swr is not None:
                         print(f"Step {self.station_controller.loop_step:6.1f} swr = {self.station_controller.swr:3.1f}")
-                        if self.station_controller.swr < 1.5:
+                        if self.station_controller.swr < 3:
                             self.station_controller.update_tunings(fkHz, step)
                             print("Tuned")
                             return
@@ -284,6 +282,9 @@ class App:
             self.check_swr()
         if txt == 'Main = Loop':
             self.station_controller.send_command("<ML>")
+            t = self.gui.tuning_slider.val
+            self.station_controller.send_command(f"<T{t}>")
+            self.gui.update_till_controller_ready()
         if txt == 'Main = Dipoles':
             self.station_controller.send_command("<MD>")
         if txt == 'Rx on main':
@@ -292,11 +293,12 @@ class App:
             self.station_controller.send_command("<RA>")
         if txt == 'Tune loop':
             if txt == 'Tune loop':
-                threading.Thread(target=self.tune_loop, daemon=True).start()
+                self.tune_loop()
         if data:
             idx = ['N','NE','E','SE','S','SW','W','NW'].index(data)
             stp = [100, 200, 300, 400, 500, 600, 700, 800][idx]
             self.station_controller.send_command(f"<P{stp}>")
+            self.gui.update_till_controller_ready()
 
 app = App()
 

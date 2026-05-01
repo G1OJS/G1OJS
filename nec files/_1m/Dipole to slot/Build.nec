@@ -1,0 +1,9 @@
+CM Length X1 = (l0-lf)/2
+CM Length X2 = (l0-lf)/2
+CM Length Y = l1/2
+CM X sections = 10
+CM Y sections = 10
+CM Rotate X, Y, Z = 0, 0, 0
+CM Move X, Y, Z = 0, 0, 0
+CE
+GE 0

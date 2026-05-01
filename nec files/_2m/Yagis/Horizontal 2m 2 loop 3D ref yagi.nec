@@ -1,0 +1,30 @@
+CM
+CM
+CM
+CE
+SY BASE=7.3
+SY WDriv=0.206776
+SY LDriv=0.793793
+SY WPara=0.206579
+SY LPara=0.871528
+SY Sep=-0.23974
+SY WD=0.005
+
+GW	1	9	-LDriv/2 	0	0	LDriv/2	0	0	WD/2
+GW	2	9	-LDriv/2	0	Wdriv	LDriv/2	0	wdriv	WD/2
+GW	3	9	-LDriv/2	0	0	-LDriv/2	0	wdriv	WD/2
+GW	4	9	LDriv/2	0	0	LDriv/2	0	wdriv	WD/2
+
+GW	11	9	-LPara/2	Sep	0	LPara/2	Sep	0	WD/2
+GW	12	9	-LPara/2	Sep	wpara	LPara/2	Sep	wpara	WD/2
+GW	13	9	-LPara/2	Sep	0	-LPara/2	Sep	wpara	WD/2
+GW	14	9	LPara/2	Sep	0	LPara/2	Sep	wpara	WD/2
+
+
+GM	0	0	0	0	0	0	0	BASE
+
+GE -1
+GN 2 0 0 0 11 0.01
+EX	0	1	5	0	1.
+FR	0	5	0	0	144.2	1.0
+EN

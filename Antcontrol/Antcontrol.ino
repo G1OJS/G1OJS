@@ -139,6 +139,7 @@ void rotateToStep() {
     }
   }
   RotatorMotor_stop();
+  printReady();
 }
 
 void getAndPrintCurrStep_Loop() {

@@ -1,0 +1,26 @@
+CM
+CM
+CM
+CM forw: 86, 88 ; back: 94, 268
+CE
+SY wd = 0.005
+SY l0=0.139728
+SY l1=0.173003
+SY lf = 0.01
+
+GW	1	9	lf/2	0	0	l0/2	0	0	wd/2
+GW	2	4	l0/2	0	0	l0/2	0	-l1/2	wd/2
+GW	3	4	l0/2	0	0	l0/2	0	l1/2	wd/2
+GW	4	9	lf/2	0	l1/2	l0/2	0	l1/2	wd/2
+GW	5	9	lf/2	0	-l1/2	l0/2	0	-l1/2	wd/2
+
+GX	0	100
+
+GW	100	1	-lf/2	0	0	lf/2	0	0	wd/2
+
+
+GE 0
+EX	0	100	1	0	1.
+FR,0,1,0,0,300
+PQ -1
+PT -1

@@ -1,0 +1,24 @@
+SY hbase = 8
+SY FMHz = 300
+SY rH=0.035287
+SY rH2=rh
+SY lh=0.099547
+SY sep=0.073026
+SY nt=1
+SY rW = 0.005
+SY rWc = 0.0005
+SY clSep=5.42e-5
+'
+'  GEOMETRY --------------------------------------
+GH	1	32	sep	lh	rH	rH	rh2	rh2	rW
+GX	1000	001
+
+GM	0	0	0	0	0	0	0	hbase
+GE	-1
+LD	5	0	0	0	58000000
+GN 2 0 0 0 11 0.01
+EK
+EX	0	1	1	0	1.	0
+FR,0,1,0,0,300
+PQ -1
+PT -1
