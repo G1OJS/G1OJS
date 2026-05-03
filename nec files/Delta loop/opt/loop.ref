@@ -1,0 +1,26 @@
+CM
+CM
+CM
+CM forw: 43, 0 ; back: 43, 180
+CE
+SY apex=9
+SY W0 = 0.005
+SY L0=10.40498
+SY s = 3
+SY ind=13.08699
+SY cap=100
+GW	101	10	0	0	0	0	s	-s	W0/2
+GW	102	10	0	s	-s	0	0.15	-s	W0/2
+GX	1 	010
+GW	100	1	-0	-0.15	-s	0	0.15	-s	W0/2
+
+GM	0	0	0	0	0	0	0	apex
+
+GE -1
+GN 2 0 0 0 11 0.01
+LD	0	101	1	1	0	ind*1e-6
+'LD	0	101	1	1	0	0	cap*1e-12
+EX	0	100	1	0	1.
+FR,0,1,0,0,14.2
+PQ -1
+PT -1

@@ -1,0 +1,36 @@
+CM
+CM
+CM
+CM forw: 0, 0 ; back: 0, 180
+CE
+SY FH=7.3
+
+SY W0 = 0.0005
+SY h=0.030048
+
+SY hL0=1.5
+SY hL1=0.633716
+SY whp=0.230348
+SY lhp=1.425995
+SY zfd=0.101751
+
+GW	1	5	whp/2	0	0	hL0	0	0	W0/2
+GX	10	100
+
+
+GW	101	3	-whp/2	0	0	-whp/2	0	lhp-zfd	W0/2
+GW	102	3	whp/2	0	0	whp/2	0	lhp-zfd	W0/2
+GW	100	1	-whp/2	0	lhp-zfd	whp/2	0	lhp-zfd	W0/2
+GW	104	3	-whp/2	0	lhp-zfd	-whp/2	0	lhp	W0/2
+GW	105	3	whp/2	0	lhp-zfd	whp/2	0	lhp	W0/2
+GW	106	1	-whp/2	0	lhp	whp/2	0	lhp	W0/2
+
+GM	0	0	0	90	0	0	0	FH
+
+GE -1
+GN 2 0 0 0 11 0.01
+LD	5	0	0	0	37700000
+EX	0	100	1	0	1.
+FR,0,1,0,0,28.2
+PQ -1
+PT -1

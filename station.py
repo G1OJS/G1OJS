@@ -173,13 +173,31 @@ class Arduino:
             print(text)
 
 class Gui:
-    def __init__(self, on_control_click, station_controller):
-        self.on_control_click = on_control_click
+    def __init__(self):
+        self.current_kHz = 0
+        self.rig = Rig()
+        self.station_controller = Arduino(verbose = True)
+        threading.Thread(target = self.station_controller.monitor, daemon = True).start()
+        self.station_controller.send_command("<QL>")
+        self.station_controller.send_command("<QR>")
         self.pmarg = 0.04
-        self.station_controller = station_controller
         self.make_layout()
-        self.plt.ion()
-        self.plt.pause(0.1)
+        self.wait_for_controller()
+        self.plt.show()
+
+    def _make_buttons(self, buttons, styles, btns_top, btns_left, btn_h, btn_w, step_x, step_y):
+        btn_x, btn_y = btns_left, btns_top
+        for i, btn in enumerate(buttons):
+            btn_axs = plt.axes([btn_x, btn_y, btn_w, btn_h])
+            if step_y:
+                btn_y -= step_y
+            else:
+                btn_x += step_x
+            style = styles[btn['style']]
+            btn_widg = Button(btn_axs, btn['label'], color=style['fc'], hovercolor='skyblue')
+            btn_widg.data = btn['data']
+            btn_widg.on_clicked(lambda event, btn_widg=btn_widg: self.on_control_click(btn_widg))
+            self.buttons.append(btn_widg)
         
     def make_layout(self, wf_left = 0.15, wf_top = 0.87):
         rcParams['toolbar'] = 'None'
@@ -215,42 +233,9 @@ class Gui:
         ax_tuning_slider = self.fig.add_axes([0.2, 0.1, 0.6, 0.05])
         self.tuning_slider = Slider(ax_tuning_slider,  'Tune step', 30, 900, orientation='horizontal', dragging = True)
 
-    def _make_buttons(self, buttons, styles, btns_top, btns_left, btn_h, btn_w, step_x, step_y):
-        btn_x, btn_y = btns_left, btns_top
-        for i, btn in enumerate(buttons):
-            btn_axs = plt.axes([btn_x, btn_y, btn_w, btn_h])
-            if step_y:
-                btn_y -= step_y
-            else:
-                btn_x += step_x
-            style = styles[btn['style']]
-            btn_widg = Button(btn_axs, btn['label'], color=style['fc'], hovercolor='skyblue')
-            btn_widg.data = btn['data']
-            btn_widg.on_clicked(lambda event, btn_widg=btn_widg: self.on_control_click(btn_widg))
-            self.buttons.append(btn_widg)
-
-    def update_till_controller_ready(self):
-        while not self.station_controller.ready:
-            self.pos_slider.set_val(self.station_controller.rotator_pos)
-            self.tuning_slider.set_val(self.station_controller.loop_step)
-            self.fig.canvas.draw()
-            self.plt.pause(0.1)
-        
-class App:
-      
-    def __init__(self):
-        self.current_kHz = 0
-        self.rig = Rig()
-        self.station_controller = Arduino(verbose = True)
-        self.gui = Gui(self.on_control_click, self.station_controller)
-        threading.Thread(target = self.station_controller.monitor, daemon = True).start()
-        self.station_controller.send_command("<QL>")
-        self.station_controller.send_command("<QR>")
-        self.gui.update_till_controller_ready()
-
     def check_swr(self):
         self.station_controller.swr = self.rig.getSWR()
-        self.gui.swr_slider.set_val(self.station_controller.get_current_swr())
+        self.swr_slider.set_val(self.station_controller.get_current_swr())
 
     def tune_loop(self):
         self.station_controller.send_command("<ML>")
@@ -260,11 +245,11 @@ class App:
         print(steps)
         if steps is not None:
             self.station_controller.send_command(f"<T{steps[0]}>")
-            self.gui.update_till_controller_ready()
+            self.wait_for_controller()
             for step in steps:
                 if step > self.station_controller.loop_step:
                     self.station_controller.send_command(f"<T{step}>")
-                    self.gui.update_till_controller_ready()
+                    self.wait_for_controller()
                     time.sleep(0.2)
                     self.check_swr()
                     if self.station_controller.swr is not None:
@@ -275,6 +260,13 @@ class App:
                             return
             print("Done - not tuned")
 
+    def wait_for_controller(self):
+        while not self.station_controller.ready:
+            self.pos_slider.set_val(self.station_controller.rotator_pos)
+            self.tuning_slider.set_val(self.station_controller.loop_step)
+            self.fig.canvas.draw()
+            self.plt.pause(0.1)
+
     def on_control_click(self, btn_widg):
         data = btn_widg.data
         txt = btn_widg.label.get_text()
@@ -282,9 +274,9 @@ class App:
             self.check_swr()
         if txt == 'Main = Loop':
             self.station_controller.send_command("<ML>")
-            t = self.gui.tuning_slider.val
+            t = self.tuning_slider.val
             self.station_controller.send_command(f"<T{t}>")
-            self.gui.update_till_controller_ready()
+            self.wait_for_controller()
         if txt == 'Main = Dipoles':
             self.station_controller.send_command("<MD>")
         if txt == 'Rx on main':
@@ -298,7 +290,7 @@ class App:
             idx = ['N','NE','E','SE','S','SW','W','NW'].index(data)
             stp = [100, 200, 300, 400, 500, 600, 700, 800][idx]
             self.station_controller.send_command(f"<P{stp}>")
-            self.gui.update_till_controller_ready()
+            self.wait_for_controller()
 
-app = App()
+gui = Gui()
 

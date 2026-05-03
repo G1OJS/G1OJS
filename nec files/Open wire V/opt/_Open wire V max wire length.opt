@@ -1,0 +1,26 @@
+CM
+CM
+CM
+CM forw: 55, 0 ; back:-55, 0
+CE
+SY apex=9
+SY W0 = 0.005
+SY tlw = 0.06
+SY tll=10
+SY lrad = 9
+SY s = 0.71*Lrad/2
+GW	100	1	-0	-tlw/2	-tll	0	tlw/2	-tll	W0/2
+GW	101	10	0	tlw/2	0	0	s	-s	W0/2
+GW	102	10	0	-tlw/2	0	0	-s	-s	W0/2
+GW	103	10	0	-tlw/2	0	0	-tlw/2	-tll	W0/2
+GW	104	10	0	tlw/2	0	0	tlw/2	-tll	W0/2
+
+GM	0	0	0	0	0	0	0	apex
+
+GE -1
+GN 2 0 0 0 11 0.01
+EX	0	100	1	0	1.
+FR,0,1,0,0,7.05
+PQ -1
+PT -1
+RP,0,37,1,1000,-90,0,5

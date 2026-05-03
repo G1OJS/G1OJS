@@ -17,7 +17,7 @@ SY rw1=0.5*dLoopWire/1000		'Main loop wire radius m
 ' GEOMETRY --------------------------------------
 '
 GH	1	n	1e-300	1e-300	r1	r1	r1*0.99	r1*0.99	rw1
-GM	0	0	90	0	0	0	0	hbase/1000
+GM	0	0	90	0	90	0	0	hbase/1000
 
 GE	-1
 LD	5	0	0	0	58000000
