@@ -76,7 +76,7 @@ class Arduino:
         self.baudrate = baudrate
         self.verbose = verbose
         self.loop_step = 500
-        self.rotator_pos = 500
+        self.rotator_pos = 180
         self.swr = 3
         self.ready = False
         self.bands = {'160m': (1.8, 2.0), '80m':  (3.5, 3.8), '60m':  (5.25, 5.45),
@@ -118,6 +118,16 @@ class Arduino:
         except IOError:
             self.vprint(f"Couldn't connect to {self.port}")
 
+    def stepmap(self, val, maptype):
+        if maptype == 'to_degrees':
+            return (360-45)*(val-100)/(800-100)
+        if maptype == 'to_step':
+            return 100+(800-100)*val/(360-45)
+
+    def rotate(self, val):
+        stp = self.stepmap(val, 'to_step')
+        self.send_command(f"<P{stp}>")
+
     def monitor(self):
         while True:
             time.sleep(0.02)
@@ -129,7 +139,7 @@ class Arduino:
             if 'CurrStepRotator' in d:
                 newval = self.parse_string(d, 16)
                 if newval is not None:
-                    self.rotator_pos = newval
+                    self.rotator_pos = self.stepmap(newval, 'to_degrees')
             if 'READY' in d:
                 print("[ARD] Ready")
                 self.ready = True
@@ -182,7 +192,8 @@ class Gui:
         self.station_controller.send_command("<QR>")
         self.pmarg = 0.04
         self.make_layout()
-        self.wait_for_controller()
+        self.tuning_slider.set_val(self.station_controller.loop_step)
+        self.pos_slider.set_val(self.station_controller.rotator_pos)
         self.plt.show()
 
     def _make_buttons(self, buttons, styles, btns_top, btns_left, btn_h, btn_w, step_x, step_y):
@@ -216,20 +227,24 @@ class Gui:
                         ]
         self._make_buttons(button_defs, styles, btns_top=wf_top, btns_left = 0.1, btn_h = 0.05, btn_w = 0.8, step_x = 0, step_y = 0.06)
         
-        button_defs = [ {'label':'N', 'style':'ctrl', 'data':'N'},
-                        {'label':'NE', 'style':'ctrl', 'data':'NE'},
-                        {'label':'E', 'style':'ctrl', 'data':'E'},
-                        {'label':'SE', 'style':'ctrl', 'data':'SE'},
-                        {'label':'S', 'style':'ctrl', 'data':'S'},
-                        {'label':'SW', 'style':'ctrl', 'data':'SW'},
-                        {'label':'W', 'style':'ctrl', 'data':'W'},
-                        {'label':'NW', 'style':'ctrl', 'data':'NW'},
-                        ]
-        self._make_buttons(button_defs, styles, btns_top = wf_top - 8 * 0.05, btns_left = 0.1, btn_h = 0.05, btn_w = 0.1, step_x = 0.1, step_y = 0.0)
-        ax_pos_slider = self.fig.add_axes([0.2, 0.3, 0.6, 0.05])
-        self.pos_slider = Slider(ax_pos_slider,  'Pos', 100, 800, orientation='horizontal', dragging = False)
+        # rotator position and indicator
+        ax_pos_slider = self.fig.add_axes([0.2, 0.4, 0.6, 0.05])
+        self.pos_slider = Slider(ax_pos_slider,  '', 0, 360-45, orientation='horizontal', dragging = False)
+        self.pos_slider.vline.set_visible(False)
+        self.pos_slider.valtext.set_visible(False)
+        self.pos_slider.on_changed(self.rotate)
+
+        self.pos_current = ax_pos_slider.axvline(0, color='blue', lw=2)
+        print( ax_pos_slider.get_xticks())
+        ax_pos_slider.add_artist(ax_pos_slider.xaxis)
+        ax_pos_slider.set_xticks([0,45,90,135,180,225,270,315])
+        ax_pos_slider.set_xticklabels(['N','', 'E','', 'S','', 'W',''])
+
+        # swr indicator
         ax_swr_slider = self.fig.add_axes([0.2, 0.2, 0.6, 0.05])
         self.swr_slider = Slider(ax_swr_slider,  'SWR', 1, 3, orientation='horizontal', dragging = False)
+
+        # loop tuning
         ax_tuning_slider = self.fig.add_axes([0.2, 0.1, 0.6, 0.05])
         self.tuning_slider = Slider(ax_tuning_slider,  'Tune step', 30, 900, orientation='horizontal', dragging = True)
 
@@ -262,13 +277,17 @@ class Gui:
 
     def wait_for_controller(self):
         while not self.station_controller.ready:
-            self.pos_slider.set_val(self.station_controller.rotator_pos)
+            self.pos_current.set_xdata([self.station_controller.rotator_pos,self.station_controller.rotator_pos])
             self.tuning_slider.set_val(self.station_controller.loop_step)
             self.fig.canvas.draw()
             self.plt.pause(0.1)
 
+    def rotate(self, val):
+        print(val)
+        self.station_controller.rotate(val)
+        self.wait_for_controller()
+
     def on_control_click(self, btn_widg):
-        data = btn_widg.data
         txt = btn_widg.label.get_text()
         if txt == 'Check swr':
             self.check_swr()
@@ -286,11 +305,7 @@ class Gui:
         if txt == 'Tune loop':
             if txt == 'Tune loop':
                 self.tune_loop()
-        if data:
-            idx = ['N','NE','E','SE','S','SW','W','NW'].index(data)
-            stp = [100, 200, 300, 400, 500, 600, 700, 800][idx]
-            self.station_controller.send_command(f"<P{stp}>")
-            self.wait_for_controller()
+
 
 gui = Gui()
 
