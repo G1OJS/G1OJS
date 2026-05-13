@@ -1,0 +1,55 @@
+CM
+CM
+CM
+CM forw: 0, 0 ; back: 0, 180
+CE
+SY FH=7.3
+SY len=4
+SY s=0.7071*len
+SY W0 = 0.0005
+SY fd = 0.1
+SY x1=.185263
+SY s1=0.1
+SY x2=.2
+SY s2=0.2
+SY x3=0.300038
+SY s3=0.3
+SY x4=1.009773
+SY s4=0.4
+SY x5=1.006958
+SY s5=0.5
+SY x6=0.989527
+SY s6=0.6
+SY x7=1.014813
+SY s7=0.715599
+SY x8=0.492532
+SY s8=0.8
+SY x9=0.49705
+SY s9=0.900001
+SY x10=0.1
+SY s10=1.0
+
+GW	1	2	0	fd/2	0	x1*s	s1*s	-s1*s	w0/2
+GW	2	2	x1*s	s1*s	-s1*s	x2*s	s2*s	-s2*s	w0/2
+GW	3	2	x2*s	s2*s	-s2*s	x3*s	s3*s	-s3*s	w0/2
+GW	4	2	x3*s	s3*s	-s3*s	x4*s	s4*s	-s4*s	w0/2
+GW	5	2	x4*s	s4*s	-s4*s	x5*s	s5*s	-s5*s	w0/2
+GW	6	2	x5*s	s5*s	-s5*s	x6*s	s6*s	-s6*s	w0/2
+GW	7	2	x6*s	s6*s	-s6*s	x7*s	s7*s	-s7*s	w0/2
+GW	8	2	x7*s	s7*s	-s7*s	x8*s	s8*s	-s8*s	w0/2
+GW	9	2	x8*s	s8*s	-s8*s	x9*s	s9*s	-s9*s	w0/2
+GW	10	2	x9*s	s9*s	-s9*s	x10*s	s10*s	-s10*s	w0/2
+GM	20	1	0	0	180
+
+GW	1000	1	0	-fd/2	0	0	fd/2	0	W0/2
+
+GM	0	0	0	0	0	0	0	FH
+
+GE -1
+GN 2 0 0 0 11 0.01
+LD	5	0	0	0	58000000
+LD	7	0	0	0	4.5	.0016
+EX	0	1000	1	0	1.
+FR,0,1,0,0,7.05
+PQ -1
+PT -1

@@ -1,0 +1,39 @@
+CM
+CM
+CM
+CE
+SY apex = 1*9
+SY W0=0.3
+SY W1=0.3
+SY W2=1.925813
+SY fd = 1*0.2
+
+SY x1=-0.1456
+SY yk1= 4.5*.7
+SY zk1= -4.5*.7
+
+SY x2=1.629078
+SY yk2 = yk1
+SY zk2 = zk1
+
+SY xk3=1*1.8
+SY yk3 = 1*0.1
+SY zk3 = -yk3
+
+GW	1	5	0	fd/2	0	x1	yk1	zk1	w0/2000
+GW	2	2	x1	yk1	zk1	x2	yk2	zk2	w1/2000
+GW	3	2	x2	yk2	zk2	xk3	yk3	zk3	w2/2000
+GM	20	1	0	0	180
+
+GW	1000	1	0	-fd/2	0	0	fd/2	0	W0/2000
+
+GM	0	0	0	0	0	0	0	apex
+
+GE -1
+GN 2 0 0 0 11 0.01
+EK
+LD	5	0	0	0	58000000
+'LD	7	1	0	0	4.5	.0016
+EX	0	1000	1	0	1.
+FR	0	5	0	0	7.07	1.0
+EN

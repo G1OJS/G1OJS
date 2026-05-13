@@ -1,0 +1,40 @@
+CM
+CM
+CM
+CE
+SY BASE=7.3
+SY Y1=-0.81065
+SY Y2=0
+SY Y3=0.284783
+SY WD=2.444e-3
+SY Sx1=0.268785
+SY Sx2=0.25
+SY Sx3=0.25
+SY Sz1=0.265964
+SY Sz2=0.250518
+SY Sz3=0.255459
+
+
+GW	12	5	-sx1	Y1	-sz1	sx1	Y1	-sz1	WD/2
+GW	13	5	sx1	Y1	-sz1	sx1	Y1	sz1	WD/2
+GW	14	5	sx1	Y1	sz1	-sx1	Y1	sz1	WD/2
+GW	15	5	-sx1	Y1	sz1	-sx1	Y1	-sz1	WD/2
+
+GW	22	5	-sx1	Y2	-sz1	sx1	Y2	-sz1	WD/2
+GW	23	5	sx1	Y2	-sz1	sx1	Y2	sz1	WD/2
+GW	24	5	sx1	Y2	sz1	-sx1	Y2	sz1	WD/2
+GW	25	5	-sx1	Y2	sz1	-sx1	Y2	-sz1	WD/2
+
+GW	32	5	-sx1	Y3	-sz1	sx1	Y3	-sz1	WD/2
+GW	33	5	sx1	Y3	-sz1	sx1	Y3	sz1	WD/2
+GW	34	5	sx1	Y3	sz1	-sx1	Y3	sz1	WD/2
+GW	35	5	-sx1	Y3	sz1	-sx1	Y3	-sz1	WD/2
+
+GM	0	0	0	0	0	0	0	BASE
+
+GE -1
+GN 2 0 0 0 11 0.01
+LD	5	0	0	0	58000000
+EX	0	22	3	0	1.
+FR	0	5	0	0	144.2	1.0
+EN

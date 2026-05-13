@@ -1,0 +1,34 @@
+' INPUTS -----------------------------------------
+'
+SY FMHz=14.1		'frequency MHz
+SY CpF=50		'Tuning cap pF
+SY Q_Cap=5000		'Tuning cap Q
+SY rw2=0.0005	'Wire radius m
+SY circ=15.97202
+SY hBase=5250		'Height to base of loop mm
+SY ElevAng=90		'Loop plane elevation angle degrees
+SY n2=36		'Coupling loop n sides
+'
+'
+' CALCULATIONS --------------------------------------
+'
+SY Cap=CpF*1e-12		'Convert capacitance to Farads
+SY Pi=3.1415926
+SY Rc=(1/(2*Pi*1e6*FMHz*Cap))/Q_Cap	'Capacitor Rc
+SY r2=circ / 6.282		'loop radius m
+'
+'
+' GEOMETRY --------------------------------------
+'
+GH	2	n2	1e-300	1e-300	r2	r2	r2	r2	rw2
+GM	0	0	0	0	-90
+GM	0	0	ElevAng	0	0	0	0	hbase/1000+r2
+GE	-1
+LD	0	2	n2/2	n2/2	Rc	0	Cap
+LD	5	0	0	0	58000000
+GN 2 0 0 0 11 0.01
+EK
+EX	0	2	n2	0	1.	0	0
+FR,0,1,0,0,14.1
+PQ -1
+PT -1

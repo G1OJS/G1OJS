@@ -1,0 +1,45 @@
+CM
+CM
+CM
+CM forw: 50, 0 ; back: 50, 180
+CE
+SY FH=7.3
+
+SY W0 = 0.0005
+SY hh = 1.5
+SY z1 = 0.02
+SY y1=0.321115
+SY z2 = 1* hh/5
+SY y2=0.20926
+SY z3 = 2* hh/5
+SY y3=0.200375
+SY z4 = 3* hh/5
+SY y4=0.221376
+SY z5 = 4* hh/5
+SY y5=0.263596
+SY z6 = 5* hh/5
+SY y6=0.597493
+
+GW	1	4	0	0	z1	0	y1	z1	W0/2
+GW	1	1	0	y1	z1	0	y2	z2	W0/2
+GW	1	1	0	y2	z2	0	y3	z3	W0/2
+GW	1	1	0	y3	z3	0	y4	z4	W0/2
+GW	1	1	0	y4	z4	0	y5	z5	W0/2
+GW	1	1	0	y5	z5	0	y6	z6	W0/2
+GW	1	4	0	y6	z6	0	0	z6	W0/2
+GX	10	010
+GX	10	001
+
+
+GW	100	1	0	0	-z1	0	0	z1	W0/2
+
+GM	0	0	0	0	0	0	0	FH
+
+GE -1
+GN 2 0 0 0 11 0.01
+LD	5	0	0	0	58000000
+LD	7	0	0	0	4.5	.0016
+EX	0	100	1	0	1.
+FR,0,1,0,0,28.2
+PQ -1
+PT -1

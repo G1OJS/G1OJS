@@ -1,0 +1,32 @@
+CM
+CM
+CM
+CM forw: 85, 0 ; back: 85, 180
+CE
+SY apex = 9
+SY wd = 0.001
+SY dd = 0.005
+SY rwd = 0.0005
+SY fd = 0.03
+SY a=1.91526
+SY b=0.32714
+SY c=0.073718
+SY e=0.776265
+SY d = e-b-c
+GW	100	9	0	fd/2	0	0	a/2	0	wd/2
+GW	101	9	-e	0	0	-e	a/2	0	rwd/2
+GW	102	5	0	a/2	0	-b	a/2	0	wd/2
+GW	103	5	-e+d	a/2	0	-e	a/2	0	rwd/2
+GX	10	010
+GW	1	1	0	-fd/2	0	0	fd/2	0	wd/2
+GM	0	0	0	0	0	0	0	apex
+GE -1
+GN 2 0 0 0 11 0.01
+EX	0	1	1	0	1.
+EK
+LD	5	0	0	0	58000000
+LD	7	0	0	0	4.5	dd/2
+FR,0,1,0,0,50.3
+PQ -1
+PT -1
+RP,0,37,73,1000,-90,0,5,5

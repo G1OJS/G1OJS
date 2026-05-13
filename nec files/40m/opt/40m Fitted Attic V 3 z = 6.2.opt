@@ -1,0 +1,38 @@
+CM
+CM
+CM
+CM forw: 78, 0 ; back: 78, 180
+CE
+SY apex = 1*9
+SY W0 = 1*0.0005
+SY fd = 1*0.2
+
+SY x1=-0.16624
+SY yk1= 4*.7
+SY zk1= -4*.7
+
+SY x2=1.721861
+SY yk2 = yk1
+SY zk2 = zk1
+
+SY x3=3.202615
+SY yk3 = 1*0.1
+SY zk3 = -yk3
+
+GW	1	5	0	fd/2	0	x1	yk1	zk1	w0/2
+GW	2	2	x1	yk1	zk1	x2	yk2	zk2	w0/2
+GW	3	2	x2	yk2	zk2	x3	yk3	zk3	w0/2
+GM	20	1	0	0	180
+
+GW	1000	1	0	-fd/2	0	0	fd/2	0	W0/2
+
+GM	0	0	0	0	0	0	0	apex
+
+GE -1
+GN 2 0 0 0 11 0.01
+LD	5	0	0	0	58000000
+LD	7	0	0	0	4.5	.0016
+EX	0	1000	1	0	1.
+FR,0,1,0,0,7.07
+PQ -1
+PT -1
