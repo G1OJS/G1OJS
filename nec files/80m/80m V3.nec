@@ -1,0 +1,30 @@
+CM
+CM
+CM
+CE
+SY apex=9
+SY W0 = 0.001
+SY ymax=2.8
+SY x0=1*-1.2
+SY dx=2.310839
+SY ds=0.2
+
+GW	100	10	0	ymax	apex-ymax	0	.05	apex	W0/2
+GW	101	2	0	ymax	apex-ymax	dx	ymax	apex-ymax	W0/2
+GW	102	5	dx	0.7*ds	apex-0.7*ds	dx	ymax	apex-ymax	W0/2
+GW	103	2	dx	0.7*ds	apex-0.7*ds	ds	0.7*ds	apex-0.7*ds	W0/2
+GW	104	10	ds	ymax-0.7*ds	apex-ymax+0.7*ds	ds	0.7*ds	apex-0.7*ds	W0/2
+GW	105	2	dx-ds	ymax-0.7*ds	apex-ymax+0.7*ds	ds	ymax-0.7*ds	apex-ymax+0.7*ds	W0/2
+GW	106	5	dx-ds	2*0.7*ds	apex-2*0.7*ds	dx-ds	ymax-0.7*ds	apex-ymax+0.7*ds	W0/2
+
+GX	100	010
+GW	1000	1	0	-.05	apex	0	.05	apex	w0/2
+GE	0
+
+LD	5	0	0	0	58000000
+
+
+GN 2 0 0 0 11 0.01
+EX	0	1000	1	0	1.
+FR	0	5	0	0	3.573	1.0
+EN

@@ -1,0 +1,31 @@
+CM
+CM
+CM
+CM forw: 0, 0 ; back: 0, 180
+CE
+SY apex = 1*9
+SY W0=1
+SY z0 = 1*5.3
+SY y0 = 1*3
+SY x0 = 2
+SY dx=2
+SY len = 4* sqr((apex-z0)*(apex-z0)+y0*y0) + dx
+
+GW	1	5	x0	-y0	z0	x0	0	apex	w0/2000
+GW	2	5	x0	0	apex	x0	y0	z0	w0/2000
+GM	10	1	0	0	0	-dx
+GW	3	5	x0	y0	z0	x0-dx	y0	z0	w0/2000
+
+
+GW	100	5	x0	-y0	z0	x0	-y0	0	w0/2000
+
+
+GE	1
+GN 2 0 0 0 11 0.01
+EK
+LD	5	0	0	0	58000000
+LD	7	1	0	0	4.5	.0025
+EX	0	100	1	0	1.
+FR,0,1,0,0,7.07
+PQ -1
+PT -1

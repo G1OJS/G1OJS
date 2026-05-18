@@ -1,19 +1,19 @@
 CM
 CM
 CM
-CM forw: 86, 89 ; back: 86, 269
+CM forw: 0, 0 ; back: 0, 180
 CE
 SY apex = 1*9
-SY W0=0.3
-SY W1=0.3
-SY W2=1.901215
+SY W0=1
+SY W1=1
+SY W2=1
 SY fd = 1*0.2
 
-SY x1=-0.14183
+SY x1=-0.1456
 SY yk1= 4.5*.7
 SY zk1= -4.5*.7
 
-SY x2=1.295358
+SY x2=1.629078
 SY yk2 = yk1
 SY zk2 = zk1
 
@@ -23,7 +23,7 @@ SY zk3 = -yk3
 
 GW	1	5	0	fd/2	0	x1	yk1	zk1	w0/2000
 GW	2	2	x1	yk1	zk1	x2	yk2	zk2	w1/2000
-GW	3	2	x2	yk2	zk2	xk3	yk3	zk3	w2/2000
+GW	3	5	x2	yk2	zk2	xk3	yk3	zk3	w2/2000
 GM	20	1	0	0	180
 
 GW	1000	1	0	-fd/2	0	0	fd/2	0	W0/2000

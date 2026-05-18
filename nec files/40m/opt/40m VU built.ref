@@ -1,0 +1,33 @@
+CM
+CM
+CM
+CM forw: 51, 189 ; back: 51, 9
+CE
+SY apex=9
+SY W0 = 0.005
+SY W1 = 0.0055
+SY ymax=3.5
+SY dx=0.7
+SY zmid=7.8
+SY smid = 2
+SY l1 = 2*1.4*ymax
+SY l = 2*dx + 2*l1 - smid + 2* (apex-0.7*smid - 5.6)
+SY shorten = l-22.8
+
+GW	100	10	0	ymax	apex-ymax	0	0	apex	W0/2
+GW	101	2	0	ymax	apex-ymax	dx	ymax	apex-ymax	W0/2
+GW	102	5	dx	0.7*smid	apex-0.7*smid	dx	ymax	apex-ymax	W0/2
+GW	103	2	dx	0.7*smid	apex-0.7*smid	dx	0.7*smid	5.6+shorten/2	W0/2
+
+GX	100	010
+GE	0
+
+LD	5	0	0	0	58000000
+LD	7	0	0	0	4.5	w1/2
+
+
+GN 2 0 0 0 11 0.01
+EX	0	100	6	0	1.
+FR,0,1,0,0,7.07
+PQ -1
+PT -1

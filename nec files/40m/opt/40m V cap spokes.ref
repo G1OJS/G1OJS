@@ -1,0 +1,32 @@
+CM
+CM
+CM
+CM forw: 0, 0 ; back: 0, 180
+CE
+SY apex=9
+SY W0 = 0.001
+SY Ws = 0.005
+SY lspoke = 1
+SY ye = 3.5
+SY ind=21.55135
+
+
+GW	1	1	0	ye	apex-ye	lspoke	ye	apex-ye	Ws/2
+GW	1	1	0	ye	apex-ye	-lspoke	ye	apex-ye	Ws/2
+
+
+GW	20	10	0	ye	apex-ye	0	.05	apex	W0/2
+GX	100	010
+GW	1000	1	0	-.05	apex	0	.05	apex	w0/2
+GE	0
+
+LD	5	0	0	0	58000000
+LD	0	20	1	1	0.1	ind*1e-6
+LD	0	120	1	1	0.1	ind*1e-6
+
+GN 2 0 0 0 11 0.01
+EK
+EX	0	1000	1	0	1.
+FR,0,1,0,0,7.07
+PQ -1
+PT -1

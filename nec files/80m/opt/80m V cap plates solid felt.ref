@@ -1,0 +1,66 @@
+CM
+CM
+CM
+CM forw: 0, 0 ; back: 0, 0
+CE
+SY apex=9
+SY W0 = 0.005
+SY L0=4.2
+SY ph=1
+SY pw=0.6
+SY cpbase = 5.5
+SY ymax = 4
+SY ind=30
+SY cap = 500
+
+GW	2	10	-pw/2	0	0	pw/2	0	0	W0/2
+GW	2	10	-pw/2	0	ph/2	pw/2	0	ph/2	W0/2
+GW	2	10	-pw/2	0	ph/4	pw/2	0	ph/4	W0/2
+GW	2	10	-pw/2	0	3*ph/4	pw/2	0	3*ph/4	W0/2
+GW	2	10	-pw/2	0	ph	pw/2	0	ph	W0/2
+
+SY p = -1
+GW	2	4	-pw*p/2	0	0	-pw*p/2	0	ph	W0/2
+SY p = -.8
+GW	2	4	-pw*p/2	0	0	-pw*p/2	0	ph	W0/2
+SY p = -.6
+GW	2	4	-pw*p/2	0	0	-pw*p/2	0	ph	W0/2
+SY p = -.4
+GW	2	4	-pw*p/2	0	0	-pw*p/2	0	ph	W0/2
+SY p = -.2
+GW	2	4	-pw*p/2	0	0	-pw*p/2	0	ph	W0/2
+SY p =  0
+GW	2	4	-pw*p/2	0	0	-pw*p/2	0	ph	W0/2
+SY p = .2
+GW	2	4	-pw*p/2	0	0	-pw*p/2	0	ph	W0/2
+SY p = .4
+GW	2	4	-pw*p/2	0	0	-pw*p/2	0	ph	W0/2
+SY p = .6
+GW	2	4	-pw*p/2	0	0	-pw*p/2	0	ph	W0/2
+SY p = .8
+GW	2	4	-pw*p/2	0	0	-pw*p/2	0	ph	W0/2
+SY p = 1
+GW	2	4	-pw*p/2	0	0	-pw*p/2	0	ph	W0/2
+GM	10	0	45	0	0	0	ymax	cpbase
+
+GW	20	10	0	ymax-0.7071*ph	cpbase+0.7071*ph	0	.05	apex	W0/2
+
+GX	100	010
+GW	1000	1	0	-.05	apex	0	.05	apex	w0/2
+GW	1001	1	0	-.05	apex-0.1	0	.05	apex-0.1	w0/2
+GW	1002	1	0	-.05	apex	0	-.05	apex-0.1	w0/2
+GW	1003	1	0	.05	apex	0	.05	apex-0.1	w0/2
+
+GE	0
+
+LD	5	0	0	0	58000000
+LD	0	1001	1	1	0.1	0	cap*1e-12
+LD	0	20	5	5	0.1	ind*1e-6
+LD	0	120	5	5	0.1	ind*1e-6
+
+GN 2 0 0 0 11 0.01
+EX	0	1000	1	0	1.
+FR,0,1,0,0,3.573
+PQ -1
+PT -1
+RP,0,37,1,1000,-90,0,5

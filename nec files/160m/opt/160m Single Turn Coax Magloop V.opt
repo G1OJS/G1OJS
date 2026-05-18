@@ -1,0 +1,22 @@
+' INPUTS -----------------------------------------
+'
+SY FMHz=1.84		'frequency MHz
+SY CpF=334.8292		'Tuning cap pF
+SY wd=5			'Main loop wire dia. mm
+SY wdc=5.5
+'
+'
+'
+GW	1	3	0	-3.5	5.3	0	0	9	wd/2000
+GW	2	3	0	0	9	0	3.5	5.3	wd/2000
+GW	3	3	0	-3.5	5.3	0	3.5	5.3	wd/2000
+GE	-1
+LD	0	3	2	2	0	0	CpF*1e-12
+LD	5	0	0	0	58000000
+LD	7	0	0	0	4.5	wdc/2000
+GN 2 0 0 0 11 0.01
+EK
+EX	0	1	1	0	1.	0
+FR,0,1,0,0,1.84
+PQ -1
+PT -1

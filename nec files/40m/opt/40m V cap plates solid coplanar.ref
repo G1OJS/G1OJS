@@ -1,0 +1,59 @@
+CM
+CM
+CM
+CM forw: 46, 0 ; back: 46, 180
+CE
+sy apex=9
+sy W0 = 0.005
+sy L0=4.2
+SY ph=0.6
+SY pw=1.4
+SY cpbase = 5.5
+SY cpinner = 3
+sy ind = 5
+
+GW	2	10	-pw/2	0	0	pw/2	0	0	W0/2
+GW	2	10	-pw/2	0	ph/2	pw/2	0	ph/2	W0/2
+GW	2	10	-pw/2	0	ph/4	pw/2	0	ph/4	W0/2
+GW	2	10	-pw/2	0	3*ph/4	pw/2	0	3*ph/4	W0/2
+GW	2	10	-pw/2	0	ph	pw/2	0	ph	W0/2
+
+sy p = -1
+GW	2	4	-pw*p/2	0	0	-pw*p/2	0	ph	W0/2
+sy p = -.8
+GW	2	4	-pw*p/2	0	0	-pw*p/2	0	ph	W0/2
+sy p = -.6
+GW	2	4	-pw*p/2	0	0	-pw*p/2	0	ph	W0/2
+sy p = -.4
+GW	2	4	-pw*p/2	0	0	-pw*p/2	0	ph	W0/2
+sy p = -.2
+GW	2	4	-pw*p/2	0	0	-pw*p/2	0	ph	W0/2
+sy p =  0
+GW	2	4	-pw*p/2	0	0	-pw*p/2	0	ph	W0/2
+sy p = .2
+GW	2	4	-pw*p/2	0	0	-pw*p/2	0	ph	W0/2
+sy p = .4
+GW	2	4	-pw*p/2	0	0	-pw*p/2	0	ph	W0/2
+sy p = .6
+GW	2	4	-pw*p/2	0	0	-pw*p/2	0	ph	W0/2
+sy p = .8
+GW	2	4	-pw*p/2	0	0	-pw*p/2	0	ph	W0/2
+sy p = 1
+GW	2	4	-pw*p/2	0	0	-pw*p/2	0	ph	W0/2
+GM	10	0	0	0	90	0	cpinner+pw/2	cpbase
+
+GW	20	10	0	cpinner	cpbase+ph	0	.05	apex	W0/2
+
+GX	100	010
+GW	1000	1	0	-.05	apex	0	.05	apex	w0/2
+GE	0
+
+LD	5	0	0	0	58000000
+LD	0	20	1	1	0	ind*1e-6
+LD	0	120	1	1	0	ind*1e-6
+
+GN 2 0 0 0 11 0.01
+EX	0	1000	1	0	1.
+FR,0,1,0,0,7.07
+PQ -1
+PT -1
